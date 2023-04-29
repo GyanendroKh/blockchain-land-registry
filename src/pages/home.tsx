@@ -1,11 +1,8 @@
-import { useAddress, useDisconnect } from '@thirdweb-dev/react';
+import { ConnectWallet } from '@thirdweb-dev/react';
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
 
 export const HomePage: FC = () => {
-  const address = useAddress();
-  const disconnect = useDisconnect();
-
   const navItems = (
     <>
       <li>
@@ -20,11 +17,9 @@ export const HomePage: FC = () => {
       <li>
         <a>About Us</a>
       </li>
-      {!!address && (
-        <li>
-          <a onClick={disconnect}>LogOut</a>
-        </li>
-      )}
+      <li>
+        <ConnectWallet btnTitle="Log In" className="!ml-1" />
+      </li>
     </>
   );
 
@@ -80,23 +75,46 @@ export const HomePage: FC = () => {
           </div>
         </div>
       </div>
+      <div className="flex justify-center w-full my-10">
+        <ConnectWallet btnTitle="Log In to get started" />
+      </div>
       <div className="flex justify-center gap-4 w-[75%] my-10 mx-auto">
         <div className="card bg-base-100 shadow-2xl flex-1">
           <div className="card-body items-center text-center">
             <h2 className="card-title">Owner</h2>
             <div className="card-actions">
-              <Link className="btn btn-primary" to="/login?role=owner">
-                LogIn
+              <Link className="btn btn-square btn-outline" to="/o">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 0 24 24"
+                  width="24px"
+                >
+                  <path
+                    d="M10.02 6L8.61 7.41 13.19 12l-4.58 4.59L10.02 18l6-6-6-6z"
+                    stroke="currentColor"
+                  />
+                </svg>
               </Link>
             </div>
           </div>
         </div>
-        <div className="card bg-slate-800 shadow-2xl flex-1">
+        <div className="card bg-base-200 shadow-2xl flex-1">
           <div className="card-body items-center text-center">
             <h2 className="card-title">Land Inspector</h2>
             <div className="card-actions">
-              <Link className="btn btn-primary" to="/login?role=inspector">
-                LogIn
+              <Link className="btn btn-square btn-outline" to="/i">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 0 24 24"
+                  width="24px"
+                >
+                  <path
+                    d="M10.02 6L8.61 7.41 13.19 12l-4.58 4.59L10.02 18l6-6-6-6z"
+                    stroke="currentColor"
+                  />
+                </svg>
               </Link>
             </div>
           </div>
@@ -105,8 +123,18 @@ export const HomePage: FC = () => {
           <div className="card-body items-center text-center">
             <h2 className="card-title">User</h2>
             <div className="card-actions">
-              <Link className="btn btn-primary" to="/login?role=user">
-                LogIn
+              <Link className="btn btn-square btn-outline" to="/u">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 0 24 24"
+                  width="24px"
+                >
+                  <path
+                    d="M10.02 6L8.61 7.41 13.19 12l-4.58 4.59L10.02 18l6-6-6-6z"
+                    stroke="currentColor"
+                  />
+                </svg>
               </Link>
             </div>
           </div>

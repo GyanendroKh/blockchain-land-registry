@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import { RootPage } from './pages/root';
 import { HomePage } from './pages/home';
 import { LogInPage } from './pages/login';
+import { OwnerPage } from './pages/owner';
 
 export const router = createBrowserRouter([
   {
@@ -11,6 +12,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />
+      },
+      {
+        path: 'o',
+        element: <OwnerPage />
       },
       {
         path: 'login',
