@@ -1,9 +1,7 @@
-function App() {
-  return (
-    <div className="text-center py-2">
-      <h1 className="text-xl font-bold">Land Registry using Blockchain</h1>
-    </div>
-  );
-}
+import { RouterProvider } from 'react-router-dom';
+import { router } from './router';
+import { FC } from 'react';
 
-export default App;
+export const App: FC = () => {
+  return <RouterProvider router={router} />;
+};
