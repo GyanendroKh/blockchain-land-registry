@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+typechain
+typechain-types
+
+#Hardhat files
+cache
+artifacts

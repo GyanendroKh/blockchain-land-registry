@@ -1,0 +1,20 @@
+{
+  "extensions": [
+    {
+      "metadata": {
+        "name": "LandRecord",
+        "metadataURI": "ipfs://Qmdk1E51DRdvXCRTNnUSqHGUYHctVGKGRd5dc4qGtZNu4J",
+        "implementation": "0x0000000000000000000000000000000000000000"
+      },
+      "functions": []
+    }
+  ],
+  "extensionDeployArgs": [
+    {
+      "name": "LandRecord",
+      "amount": 0,
+      "salt": "0xf04bea01434671148dc585ccc339117653a5bd41c5dd4e03fd999a5b3c2a12b4",
+      "bytecode": "6080604052348015600f57600080fd5b50603f80601d6000396000f3fe6080604052600080fdfea2646970667358221220e4dadc5731ea2f9ed55d3c9b7111dcccc4ffbb7e813b0bdc31e2c03ebd8df8f764736f6c63430008110033"
+    }
+  ]
+}

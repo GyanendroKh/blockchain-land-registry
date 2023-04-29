@@ -1,6 +1,33 @@
+import { useAddress, useDisconnect } from '@thirdweb-dev/react';
 import { FC } from 'react';
+import { Link } from 'react-router-dom';
 
 export const HomePage: FC = () => {
+  const address = useAddress();
+  const disconnect = useDisconnect();
+
+  const navItems = (
+    <>
+      <li>
+        <a>Home</a>
+      </li>
+      <li>
+        <a>User</a>
+      </li>
+      <li>
+        <a>Inspector</a>
+      </li>
+      <li>
+        <a>About Us</a>
+      </li>
+      {!!address && (
+        <li>
+          <a onClick={disconnect}>LogOut</a>
+        </li>
+      )}
+    </>
+  );
+
   return (
     <>
       <div className="navbar bg-base-100">
@@ -26,53 +53,13 @@ export const HomePage: FC = () => {
               tabIndex={0}
               className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
             >
-              <li>
-                <a>Item 1</a>
-              </li>
-              <li tabIndex={0}>
-                <a className="justify-between">
-                  Parent
-                  <svg
-                    className="fill-current"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" />
-                  </svg>
-                </a>
-                <ul className="p-2">
-                  <li>
-                    <a>Submenu 1</a>
-                  </li>
-                  <li>
-                    <a>Submenu 2</a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a>Item 3</a>
-              </li>
+              {navItems}
             </ul>
           </div>
           <a className="btn btn-ghost normal-case text-xl">Land Registry</a>
         </div>
         <div className="navbar-end hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">
-            <li>
-              <a>Home</a>
-            </li>
-            <li>
-              <a>User</a>
-            </li>
-            <li>
-              <a>Inspector</a>
-            </li>
-            <li>
-              <a>About Us</a>
-            </li>
-          </ul>
+          <ul className="menu menu-horizontal px-1">{navItems}</ul>
         </div>
       </div>
       <div
@@ -98,7 +85,9 @@ export const HomePage: FC = () => {
           <div className="card-body items-center text-center">
             <h2 className="card-title">Owner</h2>
             <div className="card-actions">
-              <button className="btn btn-primary">LogIn</button>
+              <Link className="btn btn-primary" to="/login?role=owner">
+                LogIn
+              </Link>
             </div>
           </div>
         </div>
@@ -106,7 +95,9 @@ export const HomePage: FC = () => {
           <div className="card-body items-center text-center">
             <h2 className="card-title">Land Inspector</h2>
             <div className="card-actions">
-              <button className="btn btn-primary">LogIn</button>
+              <Link className="btn btn-primary" to="/login?role=inspector">
+                LogIn
+              </Link>
             </div>
           </div>
         </div>
@@ -114,7 +105,9 @@ export const HomePage: FC = () => {
           <div className="card-body items-center text-center">
             <h2 className="card-title">User</h2>
             <div className="card-actions">
-              <button className="btn btn-primary">LogIn</button>
+              <Link className="btn btn-primary" to="/login?role=user">
+                LogIn
+              </Link>
             </div>
           </div>
         </div>
