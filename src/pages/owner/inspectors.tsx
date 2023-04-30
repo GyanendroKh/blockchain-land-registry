@@ -48,6 +48,10 @@ export const OwnerInspectorsPage: FC = () => {
               }
             );
           })}
+          onReset={() => {
+            setShowInspector(false);
+            reset();
+          }}
         >
           <h3 className="font-bold text-lg">Add Inspector</h3>
           <div className="py-4 flex flex-col gap-2">
@@ -77,12 +81,7 @@ export const OwnerInspectorsPage: FC = () => {
           </div>
 
           <div className="modal-action">
-            <button
-              className="btn btn-error"
-              onClick={() => {
-                setShowInspector(false);
-              }}
-            >
+            <button type="reset" className="btn btn-error">
               Cancel
             </button>
             <button
