@@ -32,7 +32,14 @@ contract LandRecord is Ownable {
   mapping(address => Inspector) inspectorsMapping;
   address[] inspectors;
 
+  mapping(address => User) usersMapping;
+  address[] users;
+
   modifier onlyInspector() {
+    if (!isInspectorExist(msg.sender)) {
+      revert('User is not inspector');
+    }
+
     _;
   }
 
@@ -78,6 +85,54 @@ contract LandRecord is Ownable {
     inspectorsMapping[_addr].name = _name;
 
     emit InspectorUpdated(_addr, _name);
+  }
+
+  function getUserCount() public view returns (uint) {
+    return users.length;
+  }
+
+  function getAllUsers() public view returns (User[] memory) {
+    User[] memory _users = new User[](users.length);
+    for (uint256 i = 0; i < users.length; i++) {
+      _users[i] = usersMapping[users[i]];
+    }
+
+    return _users;
+  }
+
+  function getUser(address _addr) public view returns (User memory) {
+    require(isUserExist(_addr), 'User does not exist');
+
+    return usersMapping[_addr];
+  }
+
+  function isUserExist(address _addr) public view returns (bool) {
+    return (usersMapping[_addr].id != address(0));
+  }
+
+  function addUser(string memory _name, string memory _aadharNumber) external {
+    address _addr = msg.sender;
+
+    require(!isUserExist(_addr), 'User already exist');
+
+    usersMapping[_addr] = User(_addr, _name, _aadharNumber, false);
+    users.push(_addr);
+  }
+
+  function updateUser(
+    string memory _name,
+    string memory _aadharNumber
+  ) external {
+    address _addr = msg.sender;
+
+    require(isUserExist(_addr), 'User does not exist');
+
+    usersMapping[_addr].name = _name;
+    usersMapping[_addr].aadharNumber = _aadharNumber;
+  }
+
+  function verifyUser(address _addr) external onlyInspector {
+    usersMapping[_addr].isVerified = true;
   }
 
   function _canSetOwner() internal view virtual override returns (bool) {

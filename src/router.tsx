@@ -6,6 +6,10 @@ import { OwnerPage } from './pages/owner';
 import { OwnerDashboardPage } from './pages/owner/dashboard';
 import { OwnerInspectorsPage } from './pages/owner/inspectors';
 import { InspectorPage } from './pages/inspector';
+import { UserRegister } from './pages/users/register';
+import { UsersPage } from './pages/users';
+import { UserDashboardPage } from './pages/users/dashboard';
+import { InspectorUsersPage } from './pages/inspector/users';
 
 export const router = createBrowserRouter([
   {
@@ -33,7 +37,26 @@ export const router = createBrowserRouter([
       {
         path: 'i',
         element: <InspectorPage />,
-        children: []
+        children: [
+          {
+            path: 'users',
+            element: <InspectorUsersPage />
+          }
+        ]
+      },
+      {
+        path: 'u',
+        element: <UsersPage />,
+        children: [
+          {
+            index: true,
+            element: <UserDashboardPage />
+          }
+        ]
+      },
+      {
+        path: 'u/register',
+        element: <UserRegister />
       },
       {
         path: 'login',
