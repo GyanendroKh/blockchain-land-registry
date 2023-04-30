@@ -5,6 +5,7 @@ import { LogInPage } from './pages/login';
 import { OwnerPage } from './pages/owner';
 import { OwnerDashboardPage } from './pages/owner/dashboard';
 import { OwnerInspectorsPage } from './pages/owner/inspectors';
+import { InspectorPage } from './pages/inspector';
 
 export const router = createBrowserRouter([
   {
@@ -28,6 +29,11 @@ export const router = createBrowserRouter([
             element: <OwnerInspectorsPage />
           }
         ]
+      },
+      {
+        path: 'i',
+        element: <InspectorPage />,
+        children: []
       },
       {
         path: 'login',
