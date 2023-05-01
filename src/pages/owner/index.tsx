@@ -5,7 +5,7 @@ import {
   useContractRead
 } from '@thirdweb-dev/react';
 import { FC } from 'react';
-import { Link, Navigate, Outlet } from 'react-router-dom';
+import { NavLink, Navigate, Outlet } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { CONTRACT_ADDRESS } from '../../constant';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
@@ -70,15 +70,22 @@ export const OwnerPage: FC = () => {
             className="drawer-overlay !opacity-40"
           ></label>
 
-          <ul className="menu p-4 w-80 text-base-content bg-base-300">
+          <ul className="menu p-4 w-80 text-base-content bg-base-300 gap-1">
             <div className="h-[150px] grid place-items-center">
               Contract Owner
             </div>
             <li>
-              <Link to="inspectors">Land Inspector</Link>
+              <NavLink to="." end>
+                Dashboard
+              </NavLink>
             </li>
             <li>
-              <a href="#">Log Out</a>
+              <NavLink to="inspectors" end>
+                Land Inspector
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/">Back to Site</NavLink>
             </li>
           </ul>
         </div>

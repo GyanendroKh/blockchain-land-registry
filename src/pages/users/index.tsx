@@ -7,7 +7,7 @@ import {
 import { FC } from 'react';
 import { CONTRACT_ADDRESS } from '../../constant';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
-import { Link, Navigate, Outlet } from 'react-router-dom';
+import { NavLink, Navigate, Outlet } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 export const UsersPage: FC = () => {
@@ -76,22 +76,30 @@ export const UsersPage: FC = () => {
             className="drawer-overlay !opacity-40"
           ></label>
 
-          <ul className="menu p-4 w-80 text-base-content bg-base-300">
+          <ul className="menu p-4 w-80 text-base-content bg-base-300 gap-1">
             <div className="h-[150px] grid place-items-center">User</div>
             <li>
-              <Link to=".">Dashboard</Link>
+              <NavLink to="." end>
+                Dashboard
+              </NavLink>
             </li>
             <li>
-              <Link to="lands">My Lands</Link>
+              <NavLink to="lands" end>
+                My Lands
+              </NavLink>
             </li>
             <li>
-              <Link to="requests">Sent Requests</Link>
+              <NavLink to="requests" end>
+                Sent Requests
+              </NavLink>
             </li>
             <li>
-              <Link to="requests/received">Received Requests</Link>
+              <NavLink to="requests/received" end>
+                Received Requests
+              </NavLink>
             </li>
             <li>
-              <a href="#">Log Out</a>
+              <NavLink to="/">Back to Site</NavLink>
             </li>
           </ul>
         </div>
