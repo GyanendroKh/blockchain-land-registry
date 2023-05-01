@@ -59,6 +59,12 @@ contract LandRecord is Ownable {
     return inspectors.length;
   }
 
+  function getInspector(address _addr) public view returns (Inspector memory) {
+    require(isInspectorExist(_addr), 'Inspector does not exist');
+
+    return inspectorsMapping[_addr];
+  }
+
   function getAllInspectors() public view returns (Inspector[] memory) {
     Inspector[] memory _inspectors = new Inspector[](inspectors.length);
     for (uint256 i = 0; i < inspectors.length; i++) {

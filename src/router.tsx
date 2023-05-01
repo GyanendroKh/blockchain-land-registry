@@ -10,6 +10,7 @@ import { UserRegister } from './pages/users/register';
 import { UsersPage } from './pages/users';
 import { UserDashboardPage } from './pages/users/dashboard';
 import { InspectorUsersPage } from './pages/inspector/users';
+import { InspectorDashboardPage } from './pages/inspector/dashboard';
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
         path: 'i',
         element: <InspectorPage />,
         children: [
+          {
+            index: true,
+            element: <InspectorDashboardPage />
+          },
           {
             path: 'users',
             element: <InspectorUsersPage />
