@@ -90,6 +90,11 @@ export const InspectorPage: FC = () => {
               </NavLink>
             </li>
             <li>
+              <NavLink to="lands" end>
+                Lands
+              </NavLink>
+            </li>
+            <li>
               <NavLink to="/">Back to Site</NavLink>
             </li>
           </ul>

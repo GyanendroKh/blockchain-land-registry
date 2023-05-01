@@ -11,6 +11,8 @@ import { UsersPage } from './pages/users';
 import { UserDashboardPage } from './pages/users/dashboard';
 import { InspectorUsersPage } from './pages/inspector/users';
 import { InspectorDashboardPage } from './pages/inspector/dashboard';
+import { UsersLandPage } from './pages/users/lands';
+import { InspectorsLandPage } from './pages/inspector/lands';
 
 export const router = createBrowserRouter([
   {
@@ -46,6 +48,10 @@ export const router = createBrowserRouter([
           {
             path: 'users',
             element: <InspectorUsersPage />
+          },
+          {
+            path: 'lands',
+            element: <InspectorsLandPage />
           }
         ]
       },
@@ -56,6 +62,10 @@ export const router = createBrowserRouter([
           {
             index: true,
             element: <UserDashboardPage />
+          },
+          {
+            path: 'lands',
+            element: <UsersLandPage />
           }
         ]
       },

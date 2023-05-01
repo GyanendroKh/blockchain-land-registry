@@ -35,6 +35,10 @@ contract LandRecord is Ownable {
   mapping(address => User) usersMapping;
   address[] users;
 
+  mapping(uint => Land) landsMapping;
+  uint[] lands;
+  mapping(address => uint[]) usersLandMapping;
+
   modifier onlyInspector() {
     if (!isInspectorExist(msg.sender)) {
       revert('User is not inspector');
@@ -139,6 +143,95 @@ contract LandRecord is Ownable {
 
   function verifyUser(address _addr) external onlyInspector {
     usersMapping[_addr].isVerified = true;
+  }
+
+  function isLandExist(uint _propertyId) public view returns (bool) {
+    return (landsMapping[_propertyId].id != 0);
+  }
+
+  function getLandCount() public view returns (uint) {
+    return lands.length;
+  }
+
+  function getAllLands() public view returns (Land[] memory) {
+    Land[] memory _lands = new Land[](lands.length);
+    for (uint256 i = 0; i < lands.length; i++) {
+      _lands[i] = landsMapping[lands[i]];
+    }
+
+    return _lands;
+  }
+
+  function getAllLands(address _addr) public view returns (Land[] memory) {
+    require(isUserExist(_addr), 'User not Exist');
+
+    uint[] memory _landsId = usersLandMapping[_addr];
+    Land[] memory _lands = new Land[](_landsId.length);
+
+    for (uint256 i = 0; i < _landsId.length; i++) {
+      _lands[i] = landsMapping[_landsId[i]];
+    }
+
+    return _lands;
+  }
+
+  function getLand(uint _id) public view returns (Land memory) {
+    require(isLandExist(_id), 'Land does not exist');
+
+    return landsMapping[_id];
+  }
+
+  function addLand(
+    uint _area,
+    string memory _landAddress,
+    string memory _latLng,
+    uint _propertyId
+  ) external {
+    require(!isLandExist(_propertyId), 'Land already exist');
+
+    uint _id = lands.length + 1;
+
+    landsMapping[_propertyId] = Land(
+      _id,
+      _area,
+      _landAddress,
+      _latLng,
+      _propertyId,
+      payable(msg.sender),
+      false
+    );
+    lands.push(_propertyId);
+    usersLandMapping[msg.sender].push(_propertyId);
+  }
+
+  function updateLand(
+    uint _propertyId,
+    uint _area,
+    string memory _landAddress,
+    string memory _latLng,
+    address payable _ownerAddr
+  ) external onlyOwner {
+    require(isLandExist(_propertyId), 'Land does not exist');
+
+    landsMapping[_propertyId].area = _area;
+    landsMapping[_propertyId].landAddress = _landAddress;
+    landsMapping[_propertyId].latLng = _latLng;
+    landsMapping[_propertyId].ownerAddr = _ownerAddr;
+  }
+
+  function verifyLand(uint _propertyId) external onlyInspector {
+    require(isLandExist(_propertyId), 'Land does not exist');
+
+    landsMapping[_propertyId].isVerified = true;
+  }
+
+  function transferLand(
+    uint _propertyId,
+    address payable _newOwnerAddr
+  ) external onlyInspector {
+    require(isLandExist(_propertyId), 'Land does not exist');
+
+    landsMapping[_propertyId].ownerAddr = _newOwnerAddr;
   }
 
   function _canSetOwner() internal view virtual override returns (bool) {
