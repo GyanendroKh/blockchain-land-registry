@@ -208,15 +208,17 @@ contract LandRecord is Ownable {
     uint _propertyId,
     uint _area,
     string memory _landAddress,
-    string memory _latLng,
-    address payable _ownerAddr
-  ) external onlyOwner {
+    string memory _latLng
+  ) external {
     require(isLandExist(_propertyId), 'Land does not exist');
+    require(
+      landsMapping[_propertyId].ownerAddr == msg.sender,
+      'Only land owner can update'
+    );
 
     landsMapping[_propertyId].area = _area;
     landsMapping[_propertyId].landAddress = _landAddress;
     landsMapping[_propertyId].latLng = _latLng;
-    landsMapping[_propertyId].ownerAddr = _ownerAddr;
   }
 
   function verifyLand(uint _propertyId) external onlyInspector {
