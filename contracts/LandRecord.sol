@@ -25,6 +25,14 @@ struct Land {
   bool isVerified;
 }
 
+struct LandTransferRequest {
+  uint id;
+  uint propertyId;
+  address payable from;
+  address payable to;
+  bool accepted;
+}
+
 contract LandRecord is Ownable {
   event InspectorAdded(address indexed id, string name);
   event InspectorUpdated(address indexed id, string name);
@@ -38,6 +46,11 @@ contract LandRecord is Ownable {
   mapping(uint => Land) landsMapping;
   uint[] lands;
   mapping(address => uint[]) usersLandMapping;
+
+  mapping(uint => LandTransferRequest) landTransferRequestsMapping;
+  uint[] landTransferRequests;
+  mapping(address => uint[]) userTransferRequestsMapping;
+  mapping(address => uint[]) userReceivedRequestMapping;
 
   modifier onlyInspector() {
     if (!isInspectorExist(msg.sender)) {
@@ -230,10 +243,102 @@ contract LandRecord is Ownable {
   function transferLand(
     uint _propertyId,
     address payable _newOwnerAddr
-  ) external onlyInspector {
+  ) internal onlyInspector {
     require(isLandExist(_propertyId), 'Land does not exist');
+    address prevOwnerAddr = landsMapping[_propertyId].ownerAddr;
 
     landsMapping[_propertyId].ownerAddr = _newOwnerAddr;
+    usersLandMapping[_newOwnerAddr].push(_propertyId);
+
+    uint[] memory usersLands = usersLandMapping[prevOwnerAddr];
+    for (uint i = 0; i < usersLands.length; i++) {
+      if (usersLands[i] == _propertyId) {
+        delete usersLandMapping[prevOwnerAddr][i];
+
+        usersLandMapping[prevOwnerAddr][i] = usersLands[i];
+        usersLandMapping[prevOwnerAddr].pop();
+        break;
+      }
+    }
+  }
+
+  function sendTansferRequest(uint _propertyId, address to) external {
+    require(isLandExist(_propertyId), 'Land does not exist');
+    require(
+      landsMapping[_propertyId].ownerAddr == msg.sender,
+      'Only land owner can start transfer'
+    );
+    require(landsMapping[_propertyId].isVerified, 'Land is not yet verified');
+
+    uint _id = landTransferRequests.length;
+    LandTransferRequest memory req = LandTransferRequest(
+      _id,
+      _propertyId,
+      payable(msg.sender),
+      payable(to),
+      false
+    );
+
+    landTransferRequestsMapping[_id] = req;
+    landTransferRequests.push(_id);
+    userTransferRequestsMapping[msg.sender].push(_id);
+    userReceivedRequestMapping[to].push(_id);
+  }
+
+  function isTransferRequestExist(uint _transferId) public view returns (bool) {
+    return landTransferRequestsMapping[_transferId].id == _transferId;
+  }
+
+  function acceptRequest(uint _transferId) external {
+    require(isTransferRequestExist(_transferId), 'Invalid transfer id');
+    require(
+      landTransferRequestsMapping[_transferId].to == msg.sender,
+      'Not the receiver of the transfer'
+    );
+
+    landTransferRequestsMapping[_transferId].accepted = true;
+  }
+
+  function approveTransferRequest(uint _transferId) external onlyInspector {
+    require(isTransferRequestExist(_transferId), 'Invalid transfer id');
+
+    LandTransferRequest memory req = landTransferRequestsMapping[_transferId];
+
+    transferLand(req.propertyId, req.to);
+    delete landTransferRequestsMapping[_transferId];
+
+    for (uint i = 0; i < landTransferRequests.length; i++) {
+      if (landTransferRequests[i] == _transferId) {
+        delete landTransferRequests[i];
+        landTransferRequests[i] = landTransferRequests[
+          landTransferRequests.length - 1
+        ];
+        landTransferRequests.pop();
+        break;
+      }
+    }
+
+    for (uint i = 0; i < userTransferRequestsMapping[req.from].length; i++) {
+      if (userTransferRequestsMapping[req.from][i] == _transferId) {
+        delete userTransferRequestsMapping[req.from][i];
+        userTransferRequestsMapping[req.from][i] = userTransferRequestsMapping[
+          req.from
+        ][userTransferRequestsMapping[req.from].length - 1];
+        userTransferRequestsMapping[req.from].pop();
+        break;
+      }
+    }
+
+    for (uint i = 0; i < userReceivedRequestMapping[req.to].length; i++) {
+      if (userReceivedRequestMapping[req.to][i] == _transferId) {
+        delete userReceivedRequestMapping[req.to][i];
+        userReceivedRequestMapping[req.to][i] = userReceivedRequestMapping[
+          req.to
+        ][userReceivedRequestMapping[req.to].length - 1];
+        userReceivedRequestMapping[req.to].pop();
+        break;
+      }
+    }
   }
 
   function _canSetOwner() internal view virtual override returns (bool) {
