@@ -10,6 +10,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import clsx from 'clsx';
 import { LoadingSpinner } from '../../components/LoadingSpinner';
+import { BigNumber } from 'ethers';
 
 export const UsersLandPage: FC = () => {
   const address = useAddress();
@@ -32,7 +33,9 @@ export const UsersLandPage: FC = () => {
   const lands = useMemo(() => {
     return (
       (
-        data as Array<[BigInt, BigInt, string, string, BigInt, string, boolean]>
+        data as Array<
+          [BigNumber, BigNumber, string, string, BigNumber, string, boolean]
+        >
       )?.map(
         ([
           _id,

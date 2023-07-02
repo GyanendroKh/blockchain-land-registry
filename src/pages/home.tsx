@@ -1,8 +1,17 @@
-import { ConnectWallet } from '@thirdweb-dev/react';
+import {
+  ConnectWallet,
+  useContract,
+  useContractRead
+} from '@thirdweb-dev/react';
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
+import { CONTRACT_ADDRESS } from '../constant';
+import { LoadingSpinner } from '../components/LoadingSpinner';
+import { ILand } from '../types';
 
 export const HomePage: FC = () => {
+  const { contract } = useContract(CONTRACT_ADDRESS);
+  const { data, isLoading } = useContractRead(contract, 'getAllLands');
   const navItems = (
     <>
       <li>
@@ -77,6 +86,47 @@ export const HomePage: FC = () => {
       </div>
       <div className="flex justify-center w-full my-10">
         <ConnectWallet btnTitle="Log In to get started" />
+      </div>
+      <div className="flex flex-col flex-1">
+        {isLoading ? (
+          <div className="flex-1 grid place-items-center">
+            <LoadingSpinner />
+          </div>
+        ) : data?.length === 0 ? (
+          <></>
+        ) : (
+          <div className="p-4">
+            <h2 className="pb-2 text-3xl font-bold">Available Lands</h2>
+            <div className="overflow-x-auto">
+              <table className="table w-full">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Property ID</th>
+                    <th>Area (in sqft)</th>
+                    <th>Address</th>
+                    <th>Lat Lng</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(data as Array<ILand>)
+                    ?.filter(l => l.isVerified)
+                    ?.map(l => {
+                      return (
+                        <tr key={l.id.toString()}>
+                          <th>{l.id.toString()}</th>
+                          <td>{l.propertyId.toString()}</td>
+                          <td>{l.area.toString()}</td>
+                          <td>{l.landAddress}</td>
+                          <td>{l.latLng}</td>
+                        </tr>
+                      );
+                    })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
       </div>
       <div className="flex justify-center gap-4 w-[75%] my-10 mx-auto">
         <div className="card bg-base-100 shadow-2xl flex-1">
