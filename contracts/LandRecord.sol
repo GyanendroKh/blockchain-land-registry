@@ -33,6 +33,10 @@ struct LandTransferRequest {
   bool accepted;
 }
 
+struct LandTransferRequestWithLand {
+  Land land;
+}
+
 contract LandRecord is Ownable {
   event InspectorAdded(address indexed id, string name);
   event InspectorUpdated(address indexed id, string name);
@@ -339,6 +343,38 @@ contract LandRecord is Ownable {
         break;
       }
     }
+  }
+
+  function usersSentTransferRequests(
+    address _id
+  ) public view returns (Land[] memory) {
+    uint reqLen = userTransferRequestsMapping[_id].length;
+    Land[] memory _lands = new Land[](reqLen);
+
+    for (uint i = 0; i < reqLen; i++) {
+      _lands[i] = landsMapping[
+        landTransferRequestsMapping[userTransferRequestsMapping[_id][i]]
+          .propertyId
+      ];
+    }
+
+    return _lands;
+  }
+
+  function usersReceivedTransferRequests(
+    address _id
+  ) public view returns (Land[] memory) {
+    uint reqLen = userReceivedRequestMapping[_id].length;
+    Land[] memory _lands = new Land[](reqLen);
+
+    for (uint i = 0; i < reqLen; i++) {
+      _lands[i] = landsMapping[
+        landTransferRequestsMapping[userReceivedRequestMapping[_id][i]]
+          .propertyId
+      ];
+    }
+
+    return _lands;
   }
 
   function _canSetOwner() internal view virtual override returns (bool) {
